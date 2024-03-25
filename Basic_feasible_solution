@@ -1,0 +1,25 @@
+A=[1 0 0 1 0 0 0 ; 0 1 0 0 1 0 0 ; -1 1 0 0 0 1 0 ; -1 2 0 0 0 0 1]; %% in form of x1 x2 x3 s1 s2 s3
+b=[4; 4 ; 6; 4];
+C=[-1 2 -1 0 0 0 0];
+[m,n]=size(A);
+a=1:1:7;
+d=nchoosek(n,m) %% combinations
+c=nchoosek(a,m) 
+sol=[];
+for i=1:d
+    x=zeros(1,n)
+    B=A(:,c(i,:))
+    if det(B)~=0
+        X(i,:)=B\b;
+        if X(i,:) > 0
+            x(c(i,:))=X(i,:);
+            sol=[sol;x] %% feasible solutions
+        end
+    end
+end
+% % [s,f]=max(C*sol')
+% % sol(f,:)
+% % sprintf('solution is %f and index is %d',s,f)
+feasible_value=sol*transpose(C)
+[max_val,index]=max(feasible_value)
+
