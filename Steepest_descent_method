@@ -1,0 +1,72 @@
+clc
+clear all
+format short
+a=0
+b=0
+f=@(x,y)(3*x^2-4*x*y+2*y^2+4*x+6)
+grad=@(x,y)[6*x-4*y+4,-4*x+4*y]
+solA=[];
+solB=[];
+direction=[];
+answer=[];
+for k=1:4
+    grad(a,b)
+    d=-grad(a,b)/norm(grad(a,b))
+    direction=[direction;d]
+    fun=@(z)(3*(a+z*d(1))^2 - 4*(a+z*d(1))*(b+z*d(2))+2*(b+z*d(2))^2 + 4*(a+z*d(1)) + 6)
+    alpha=fminbnd(fun,0,10000)
+    a=a+alpha*d(1)
+    solA=[solA;a];
+    b=b+alpha*d(2)
+    solB=[solB;b];
+    result=f(a,b)
+    answer=[answer;result]
+
+end
+ f(a,b)  
+ table(direction,solA,solB,answer)
+
+
+% %  1. Initialization (clc, clear all, format short):
+% % 
+% % clc: Clears the command window.
+% % clear all: Clears all variables from the workspace.
+% % format short: Sets the output format for numbers to display fewer decimal places.
+% % 2. Setting up function and gradient (a, b, f, grad):
+% % 
+% % a = 0, b = 0: These define the starting point (x0, y0) for the gradient descent algorithm.
+% % f = @(x, y) (3*x^2 - 4*x*y + 2*y^2 + 4*x + 6): This defines the function you want to minimize. It takes two arguments (x and y) and returns the function value at that point.
+% % grad = @(x, y) [6*x - 4*y + 4, -4*x + 4*y]: This defines the gradient of the function. The gradient is a vector that points in the direction of the steepest ascent of the function. In this case, the negative of the gradient points in the direction of steepest descent.
+% % 3. Initialization for storing results (solA, solB, direction, answer):
+% % 
+% % solA = [], solB = []: These empty arrays will store the values of x (a) and y (b) at each iteration.
+% % direction = []: This empty array will store the direction vector (descent direction) at each iteration.
+% % answer = []: This empty array will store the function value (f(x, y)) at each iteration.
+% % 4. Loop for gradient descent (for k=1:4):
+% % 
+% % This loop iterates the gradient descent algorithm four times.
+% % 
+% % grad(a, b): Calculates the gradient at the current position (a, b).
+% % d = -grad(a, b) / norm(grad(a, b)): Calculates the descent direction by negating the gradient and normalizing it (making it a unit vector).
+% % direction = [direction; d]: Stores the descent direction for this iteration in the direction array.
+% % fun = @(z) ...: Defines a function for line search within the loop. This function takes a step size z and calculates the function value along the descent direction with that step size.
+% % alpha = fminbnd(fun, 0, 10000): Uses the fminbnd function to find the optimal step size (alpha) along the descent direction that minimizes the function.
+% % fminbnd: This function finds the minimum value of a function within a specified bound. Here, the bounds are 0 and 10000 for the step size.
+% % a = a + alpha*d(1): Updates the x value (a) by moving along the descent direction with the step size alpha.
+% % solA = [solA; a]: Stores the updated x value in the solA array.
+% % b = b + alpha*d(2): Updates the y value (b) by moving along the descent direction with the step size alpha.
+% % solB = [solB; b]: Stores the updated y value in the solB array.
+% % result = f(a, b): Calculates the function value at the new position (a, b).
+% % answer = [answer; result]: Stores the function value in the answer array.
+% % 5. Final function evaluation (f(a, b)):
+% % 
+% % Calculates the function value at the final position (a, b) after the loop completes.
+% % 
+% % 6. Displaying results as a table (table(direction,solA,solB,answer)):
+% % 
+% % Creates a table using the table function.
+% % The table has four columns:
+% % direction: Stores the descent direction vectors from each iteration.
+% % solA: Stores the x (a) values at each iteration.
+% % solB: Stores the y (b) values at each iteration.
+% % answer: Stores the function values (f(x, y)) at each iteration
