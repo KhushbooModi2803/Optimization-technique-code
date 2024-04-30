@@ -1,0 +1,20 @@
+clc;
+clear all;
+tol = 0.5;
+a = 1;
+b = 1/2;
+f = @(x, y)(x^2 - x*y + y^2);
+grad = @(x,y)[2*x - y, -x + 2*y];
+while true
+    prev = f(a,b);
+    d = -grad(a,b)/norm(grad(a,b));
+    fun = @(z)((a + z*d(1))^2 - (a + z*d(1))*(b + z*d(2)) + (b + z *d(2))^2);
+    alpha = fminbnd(fun, 0, 100000);
+    a = a + alpha * d(1)
+    b = b + alpha * d(2)
+    new = f(a,b);
+    if abs(new - prev) < tol
+        break;
+    end
+end
+f(a,b)
